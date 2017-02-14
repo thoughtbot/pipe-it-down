@@ -63,7 +63,7 @@ function setUpClickEvents() {
   $(document).on("click", ".pid-collapse", function(event) {
     event.preventDefault();
     var fileContent = $(this).closest(".file").find(".js-file-content");
-    fileContent.hide();
+    fileContent.toggle();
   });
 }
 
