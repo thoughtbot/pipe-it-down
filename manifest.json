@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Pipe it Down",
+  "version": "0.0.1",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://github.com/*"
+      ],
+      "js": [
+        "zepto.min.js",
+        "client.js"
+      ]
+    }
+  ]
+}
