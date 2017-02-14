@@ -6,7 +6,7 @@ var tooltip = "Collapse this file";
 
 var link = $("<a />").attr({
   "aria-label": tooltip,
-  "class": "btn-octicon tooltipped tooltipped-nw",
+  "class": "btn-octicon tooltipped tooltipped-nw pid-collapse",
   "data-skip-pjax": "",
   "href": "#",
   "rel": "nofollow"
@@ -35,14 +35,38 @@ function decorateLazyLoadedFiles() {
 }
 
 function decorateFile(file) {
-  var fileContent = $(file).find(".js-file-content");
-  var fileLink = link.clone();
-  fileLink.click(function(event) {
-    event.preventDefault();
-    fileContent.hide();
-  });
-  $(file).find(".file-actions").append(fileLink);
+  if ($(file).find(".pid-collapse").length === 0) {
+    $(file).find(".file-actions").append(link.clone());
+  }
 }
 
-decoratePreLoadedFiles();
-decorateLazyLoadedFiles();
+function decorate() {
+  decoratePreLoadedFiles();
+  decorateLazyLoadedFiles();
+}
+
+function handlePjaxPageLoad() {
+  var observer = new MutationObserver(function(mutations) {
+    decorate();
+  });
+
+  $(".experiment-repo-nav").each(function() {
+    observer.observe(this, { childList: true, subtree: true });
+  });
+}
+
+function pageHasFiles() {
+  return $(".js-file-content").length > 0;
+}
+
+function setUpClickEvents() {
+  $(document).on("click", ".pid-collapse", function(event) {
+    event.preventDefault();
+    var fileContent = $(this).closest(".file").find(".js-file-content");
+    fileContent.hide();
+  });
+}
+
+handlePjaxPageLoad();
+decorate();
+setUpClickEvents();
