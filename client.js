@@ -12,61 +12,28 @@ var link = $("<a />").attr({
   "rel": "nofollow"
 }).html(icon);
 
-function decoratePreLoadedFiles() {
+function decorateFiles() {
   $(".file").each(function() {
     decorateFile(this);
   });
 }
 
-function decorateLazyLoadedFiles() {
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      mutation.addedNodes.forEach(function(node) {
-        if ($(node).hasClass("file")) {
-          decorateFile(node);
-        }
-      });
-    });
-  });
-
-  $(".js-diff-progressive-container").each(function() {
-    observer.observe(this, { childList: true });
-  });
-}
-
 function decorateFile(file) {
   if ($(file).find(".pid-collapse").length === 0) {
-    $(file).find(".file-actions").append(link.clone());
+    var fileContent = $(file).find(".js-file-content");
+    var fileLink = link.clone();
+    fileLink.click(function(event) {
+      event.preventDefault();
+      fileContent.toggle();
+    });
+    $(file).find(".file-actions").append(fileLink);
   }
 }
 
-function decorate() {
-  decoratePreLoadedFiles();
-  decorateLazyLoadedFiles();
-}
+var observer = new MutationObserver(() => decorateFiles());
 
-function handlePjaxPageLoad() {
-  var observer = new MutationObserver(function(mutations) {
-    decorate();
-  });
+$("[role=main]").each(function() {
+  observer.observe(this, { childList: true, subtree: true });
+});
 
-  $(".experiment-repo-nav").each(function() {
-    observer.observe(this, { childList: true, subtree: true });
-  });
-}
-
-function pageHasFiles() {
-  return $(".js-file-content").length > 0;
-}
-
-function setUpClickEvents() {
-  $(document).on("click", ".pid-collapse", function(event) {
-    event.preventDefault();
-    var fileContent = $(this).closest(".file").find(".js-file-content");
-    fileContent.toggle();
-  });
-}
-
-handlePjaxPageLoad();
-decorate();
-setUpClickEvents();
+decorateFiles();
