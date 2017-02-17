@@ -12,17 +12,32 @@ const link = $("<a />").attr({
   "rel": "nofollow"
 }).html(icon);
 
+const namespace = window.location.pathname.replace(/\/(files|commits)?\/?$/, "");
+const store = new Store(namespace);
+
 function decorateFiles() {
   $(".file").forEach(file => decorateFile(file));
 }
 
 function decorateFile(file) {
   if ($(file).find(".pid-collapse").length === 0) {
+    const fileName = $(file).find(".file-header").data("path");
     const fileContent = $(file).find(".js-file-content");
+    store.getCollapsed(fileName).then(collapsed => {
+      if (collapsed) {
+        fileContent.hide();
+      }
+    });
     const fileLink = link.clone();
     fileLink.click(event => {
       event.preventDefault();
-      fileContent.toggle();
+      if (fileContent.css("display") === "none") {
+        fileContent.show();
+        store.setUncollapsed(fileName);
+      } else {
+        fileContent.hide();
+        store.setCollapsed(fileName);
+      }
     });
     $(file).find(".file-actions").append(fileLink);
   }
