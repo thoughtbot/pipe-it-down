@@ -11,6 +11,7 @@
       "js": [
         "zepto.min.js",
         "github.js",
+        "icons.js",
         "store.js",
         "client.js"
       ]
