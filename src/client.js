@@ -12,8 +12,8 @@ const link = $("<a />").attr({
   "rel": "nofollow"
 }).html(icon);
 
-const namespace = window.location.pathname.replace(/\/(files|commits)?\/?$/, "");
-const store = new Store(namespace);
+const github = new GitHub({ pathname: window.location.pathname });
+const store = new Store(github.pullRequestPath());
 
 function decorateFiles() {
   $(".file").forEach(file => decorateFile(file));
@@ -43,10 +43,12 @@ function decorateFile(file) {
   }
 }
 
-const observer = new MutationObserver(() => decorateFiles());
+if (github.isPullRequest()) {
+  const observer = new MutationObserver(() => decorateFiles());
 
-$("[role=main]").forEach(main =>
-  observer.observe(main, { childList: true, subtree: true })
-);
+  $("[role=main]").forEach(main =>
+    observer.observe(main, { childList: true, subtree: true })
+  );
 
-decorateFiles();
+  decorateFiles();
+}

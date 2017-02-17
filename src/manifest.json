@@ -10,6 +10,7 @@
       ],
       "js": [
         "zepto.min.js",
+        "github.js",
         "store.js",
         "client.js"
       ]
