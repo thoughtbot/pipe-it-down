@@ -3,6 +3,10 @@ class GitHub {
     this.pathname = pathname;
   }
 
+  files() {
+    return $(".file");
+  }
+
   isPullRequest() {
     return !!this.pullRequestPath();
   }
