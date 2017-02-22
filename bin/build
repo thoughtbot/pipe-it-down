@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -e
+
+mkdir -p pkg
+
+zip -j -X pkg/pipe-it-down.zip src/*
