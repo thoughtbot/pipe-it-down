@@ -1,5 +1,15 @@
 # Pipe it Down
 
+## NOTICE
+
+Pipe it Down is no longer maintained. For more info about dealing with large
+diffs on GitHub, see this post for [automatically collapsing
+files][auto-collapse].
+
+<hr/>
+
+[auto-collapse]: https://robots.thoughtbot.com/github-diff-supression
+
 [![Pipe it Down on the Chrome Web Store](web-store-badge.png)][extension]
 
 A Chrome extension to reduce diff noise on GitHub.
